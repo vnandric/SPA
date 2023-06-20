@@ -1,27 +1,4 @@
 $(document).ready(function () {
-    $('#myForm').submit(function (e) {
-        e.preventDefault(); // Prevent form submission
-
-        // Get form data
-        let formData = $(this).serialize();
-
-        // Send data using AJAX
-        $.ajax({
-            type: 'POST',
-            url: 'save_data.php', // PHP file to handle the data
-            data: formData,
-            success: function (response) {
-                alert('Data saved successfully!');
-                // Optionally, perform additional actions after data is saved
-            },
-            error: function () {
-                alert('Error occurred. Please try again later.');
-            }
-        });
-    });
-});
-
-$(document).ready(function () {
     // Function to retrieve and display JSON data
     function fetchData() {
         $.ajax({
@@ -66,6 +43,31 @@ $(document).ready(function () {
 
     // Call the fetchData function initially
     fetchData();
+
+    $('#myForm').submit(function(e) {
+        e.preventDefault(); // Prevent form submission
+    
+        // Get form data
+        let formData = new FormData(this);
+    
+        // Send data using AJAX
+        $.ajax({
+          type: 'POST',
+          url: 'save_data.php', // PHP file to handle the data
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            alert('Data saved successfully!');
+            // Optionally, perform additional actions after data is saved
+          
+            fetchData(); // Fetch data again to update the displayed content
+          },
+          error: function() {
+            alert('Error occurred. Please try again later.');
+          }
+        });
+      });
 
     // Function to show update form
     function showUpdateForm(index) {
